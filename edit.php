@@ -37,19 +37,19 @@ if (isset($_POST["submit"])) {
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-  <title>PHP CRUD Application</title>
+  <link rel="stylesheet" href="css/style.css">  
+  <title>Edit</title>
 </head>
 
 <body>
-  <nav class="navbar navbar-light justify-content-center fs-3 mb-5" style="background-color: #00ff5573;">
-    PHP Complete CRUD Application
-  </nav>
+  <header>
+  <h1>Edit</h1>
+  <a href="logout.php" class="ghost">Logout</a>
+  </header>
 
-  <div class="container">
+  <div class="container isWhite">
     <div class="text-center mb-4">
-      <h3>Edit User Information</h3>
-      <p class="text-muted">Click update after changing any information</p>
+      <h4>Edit information</h4>
     </div>
 
     <?php
@@ -89,7 +89,7 @@ if (isset($_POST["submit"])) {
 
         <div>
           <button type="submit" class="btn btn-success" name="submit">Update</button>
-          <a href="index.php" class="btn btn-danger">Cancel</a>
+          <a href="admin_index.php" class="btn btn-danger">Cancel</a>
         </div>
       </form>
     </div>
