@@ -1,92 +1,179 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
 
-*{
-   margin:0; padding:0;
-   box-sizing: border-box;
-   outline: none; border:none;
-   text-decoration: none;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  text-decoration: none;
 }
 
 body {
-	background: url(../assets/bg3.jpg);
-   background-size: cover;
-	background-repeat: no-repeat;
-   backdrop-filter: blur(20px);
-	display: flex;
-	flex-direction: column;
-	font-family: 'Montserrat', sans-serif;
-	height: 100vh;
-    margin: 0px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  font-family: "Montserrat", sans-serif;
+  height: 100vh;
+  margin: 0px;
 }
 
 a {
-	font-weight: bold;
-	border-radius: 20px;
-	border: 1px solid #ffffff;
-   border-style: none;
-	background-color: #44347c;
-	color: #FFFFFF;
-	font-size: 12px;
-	font-weight: bold;
-	padding: 12px 45px;
-	letter-spacing: 1px;
-	text-transform: uppercase;
-	transition: transform 80ms ease-in;
-   text-decoration: none;
-   margin:0 5px;
- }
-
-a:hover {
-   background-color: #0c0b34;
-   color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  border: 1px solid #ffffff;
+  border-style: none;
+  background-color: #44347c;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+  text-decoration: none;
+  margin: 0 5px;
+  &:hover {
+    background-color: #0c0b34;
+    color: white;
+  }
 }
-
 
 a.ghost {
-   border-style: solid;
-	background-color: transparent;
-	border-color: #FFFFFF;
+  border-style: solid;
+  background-color: transparent;
+  border-color: #ffffff;
+  transition: background-color 0.2s;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.43);
+    color: white;
+  }
+}
+.btn-light {
+  transition: background-color 0.2s;
+  font-weight: bold;
+  border-radius: 20px;
+  border: 1px solid #ffffff;
+  border-style: solid;
+  background-color: transparent;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+  text-decoration: none;
+  margin: 0 5px;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.43);
+    color: white;
+  }
 }
 
-a.ghost:hover {
-   background-color: rgba(255, 255, 255, 0.43);
-   color: white;
+table {
+  background: rgba(0, 0, 0, 0.438) !important;
 }
 
+a.edit-btn {
+  margin: 0px;
+  padding: 10px 20px;
+  border-style: none;
+  background-color: transparent;
+  border-color: #ffffff;
+}
+
+.hover-red {
+  font-size: 18px;
+  color: #000000;
+  transition: color 0.1s;
+  &:hover {
+    color: red;
+  }
+}
+
+.hover-blue {
+  font-size: 18px;
+  color: #000000;
+  transition: color 0.1s;
+  &:hover {
+    color: royalblue;
+  }
+}
+
+fa-solid {
+  color: green !important;
+}
 
 h1 {
-   font-weight: bold;
-   color: white;
-   margin-right: auto;
+  font-weight: bold;
+  color: white;
+  margin-right: auto;
 }
 
 header {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  padding: 30px 16%;
+  padding: 30px 7.5%;
   background: url(../assets/bg2.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   backdrop-filter: blur(20px);
   margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-info h1,
+.user-info p {
+  margin: 0;
+}
+
+header .spacer {
+  flex-grow: 1;
 }
 
 table {
-   background-color: white !important;
+  background-color: white !important;
 }
 
-#particles-js{
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   background-image: url('');
-   background-size: cover;
-   background-position: 50% 50%;
-   background-repeat: no-repeat;
-   z-index: -100;
-}  
+canvas {
+  position: fixed;
+  z-index: -100;
+  width: 100%;
+  height: 100%;
+  filter: saturate(0);
+  margin: 0px;
+}
+
+#particles-js {
+  z-index: -99;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
 
 .isWhite {
-   color: white !important;
+  color: white !important;
+}
+
+.sortable {
+  cursor: pointer;
+}
+
+.modal-dialog {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  transform: translate(0, 0) !important;
+  max-width: 450px !important; /* Adjust the value as per your requirement */
+  min-width: 450px !important;
+ margin-top: 50px !important;
 }
