@@ -1,10 +1,17 @@
+
 <?php
+$host = 'localhost';
+$port = '5432';
+$dbname = 'OJTmanagementSystem';
+$user = 'postgres';
+$password = 'admin';
 
-// Create connection
-$conn = mysqli_connect('localhost','root','','php-crud');
+$connection_string = "host=$host port=$port dbname=$dbname user=$user password=$password";
 
-// Check connection
+$conn = pg_connect($connection_string);
+
 if (!$conn) {
-  die("Connection failed: " . mysqli_connect_error());
+    echo "Failed to connect to the database.";
+    exit();
 }
-// echo "Connected successfully";
+?>

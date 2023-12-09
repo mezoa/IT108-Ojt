@@ -1,0 +1,89 @@
+<!-- Sorting Container -->
+<div class="modal fade" id="sortingContainer" tabindex="-1" aria-labelledby="sortingContainerLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sortingModalLabel">Sort Results</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+         <div class="sorting-container">
+            <h5 class="sort-header">ID</h5>
+              <div class="sort-row">
+                <div class="sort-check">
+                  <input class="sort-check-input" type="checkbox" value="ojt_program.id_no" id="sortById">
+                  <label class="sort-check-label" for="sortById">Stud ID</label>
+                </div>
+                <div class="sort-check">
+                  <input class="sort-check-input" type="checkbox" value="companies.company_entry_id" id="sortById">
+                  <label class="sort-check-label" for="sortById">Company ID</label>
+                </div>
+                <div class="sort-check">
+                  <input class="sort-check-input" type="checkbox" value="req_id" id="sortById">
+                  <label class="sort-check-label" for="sortById">Requirements ID</label>
+                </div>
+              </div>
+          </div>
+          <div class="sort-container">
+            <h5 class="sort-header">Academic Year</h5>
+            <div class="sort-row">
+              <div class="sort-check">
+                <input class="sort-check-input" type="checkbox" value="ojt_program.academic_year" id="sortById">
+                <label class="sort-check-label" for="sortById">2020-2021</label>
+              </div>
+              <div class="sort-check">
+                <input class="sort-check-input" type="checkbox" value="ojt_program.academic_year" id="sortById">
+                <label class="sort-check-label" for="sortById">2021-2022</label>
+              </div>
+              <div class="sort-check">
+                <input class="sort-check-input" type="checkbox" value="ojt_program.academic_year" id="sortById">
+                <label class="sort-check-label" for="sortById">2022-2023</label>
+              </div>
+            </div>
+          </div>
+          <div class="sort-container">
+            <h5 class="sort-header">Other Columns</h5>
+            <div class="sort-row">
+                <div class="sort-check">
+                  <input class="sort-check-input" type="checkbox" value="ojt_program.program" id="sortById">
+                  <label class="sort-check-label" for="sortById">Program</label>
+                </div>
+                <div class="sort-check">
+                  <input class="sort-check-input" type="checkbox" value="ojt_program.yr_lvl" id="sortById">
+                  <label class="sort-check-label" for="sortById">Year Level</label>
+                </div>
+                <div class="sort-check">
+                  <input class="sort-check-input" type="checkbox" value="ojt_program.rendered_hours" id="sortById">
+                  <label class="sort-check-label" for="sortById">Rendered Hours</label>
+                </div>
+            </div>
+            <div class="sort-row">
+              <div class="sort-check">
+                <input class="sort-check-input" type="checkbox" value="companies.moa" id="sortById">
+                <label class="sort-check-label" for="sortById">MOA</label>
+              </div>
+              <div class="sort-check">
+                <input class="sort-check-input" type="checkbox" value="ojt_program.requirements" id="sortById">
+                <label class="sort-check-label" for="sortById">Requirements</label>
+              </div>
+              <div class="sort-check">
+                <input class="sort-check-input" type="checkbox" value="ojt_program.start_date" id="sortById">
+                <label class="sort-check-label" for="sortById">Start Date</label>
+              </div>
+            </div>
+            <div class="sort-row">
+              <div class="sort-check">
+                <input class="sort-check-input" type="checkbox" value="ojt_program.end_date" id="sortById">
+                <label class="sort-check-label" for="sortById">End Date</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="applySorting">Apply Sorting</button>
+        </div>
+      </div>
+    </div>
+  </div>

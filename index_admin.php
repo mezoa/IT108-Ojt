@@ -5,9 +5,24 @@ session_start();
 
 if (!isset($_SESSION['instructor_name'])) {
   header('location:index.php');
+  exit();
 }
 
+// Construct the SQL query based on $viewQuery or any other criteria
+$sql = "SELECT * FROM ojt_program WHERE academic_year = '2020-2021'";
+
+// Fetch data based on the selected query
+$result = pg_query($conn, $sql);
+
+if (!$result) {
+  // Handle query errors here, if any
+  $errorMessage = "Error executing query: " . pg_last_error($conn);
+  // Redirect with error message
+  header("location:index_admin.php?error=" . urlencode($errorMessage));
+  exit();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,9 +48,9 @@ if (!isset($_SESSION['instructor_name'])) {
       <p>Instructor</p>
     </div>
     <div class="spacer"></div>
-    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#customQueryModal">Filter</button>
-    <a href="add_event.php" class="ghost">Add Event</a>
-    <a href="index_subject.php" class="ghost">View Subjects</a>
+    <a href="index_view.php" class="ghost">Edit Record</a>
+    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#filterSortingContainer">Filter</button>
+    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#viewQuery">View</button>
     <a href="logout.php" class="ghost">Logout</a>
   </header>
 
@@ -49,73 +64,307 @@ if (!isset($_SESSION['instructor_name'])) {
     </div>';
     }
     ?>
+  
 
-    <div class="modal fade" id="customQueryModal" tabindex="-1" aria-labelledby="customQueryModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
+  <!-- Customized Filter Column Selection Modal -->
+  <!-- Filter and Sorting Container Modal -->
+<div class="modal fade" id="filterSortingContainer" tabindex="-1" aria-labelledby="filterSortingContainerLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg custom-modal-dialog">
+      <div class="modal-content">
+        <!-- Filter Section -->
+        <div class="modal-filter">
+          <!-- Filter Header -->
           <div class="modal-header">
-            <h5 class="modal-title" id="customQueryModalLabel">Filter</h5>
+            <h5 class="modal-title" id="filterColumnModalLabel">Filter Columns</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+          <!-- Filter Body -->
           <div class="modal-body">
-            <form id="customQueryForm">
-              <div class="mb-3">
-                <label for="customQuery" class="form-label">Enter SQL Query</label>
-                <textarea class="form-control" id="customQuery" name="customQuery" rows="5" required>SELECT * FROM event_tbl e INNER JOIN subject_tbl s ON e.subject_id = s.subject_id;</textarea>
+            <!-- Filter Content Here -->
+            <div class="table-container">
+                <h5 class="table-header">OJT Program Table</h5>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="id_no" name="columns[]" value="ojt_program.id_no" data-table="ojt_program">
+                            <label for="id_no">Student ID</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="last_name" name="columns[]" value="ojt_program.last_name" data-table="ojt_program">
+                            <label for="last_name">Last Name</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="first_name" name="columns[]" value="ojt_program.first_name" data-table="ojt_program">
+                            <label for="first_name">First Name</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="middle_name" name="columns[]" value="ojt_program.middle_name" data-table="ojt_program">
+                            <label for="middle_name">Middle Name</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="program" name="columns[]" value="ojt_program.program" data-table="ojt_program">
+                            <label for="program">Program</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="yr_lvl" name="columns[]" value="ojt_program.yr_lvl" data-table="ojt_program">
+                            <label for="yr_lvl">Year Level</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="email" name="columns[]" value="ojt_program.email" data-table="ojt_program">
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="contact_no" name="columns[]" value="ojt_program.contact_no" data-table="ojt_program">
+                            <label for="contact_no">Contact No.</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="company_entry_id" name="columns[]" value="ojt_program.company_entry_id" data-table="ojt_program">
+                            <label for="company_entry_id">Company ID</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="academic_year" name="columns[]" value="ojt_program.academic_year" data-table="ojt_program">
+                            <label for="academic_year">A.Y.</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="status" name="columns[]" value="ojt_program.status" data-table="ojt_program">
+                            <label for="status">Status</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="start_date" name="columns[]" value="ojt_program.start_date" data-table="ojt_program">
+                            <label for="start_date">Start Date</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="end_date" name="columns[]" value="ojt_program.end_date" data-table="ojt_program">
+                            <label for="end_date">End Date</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="rendered_hours" name="columns[]" value="ojt_program.rendered_hours" data-table="ojt_program">
+                            <label for="rendered_hours">Rendered Hours</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="internship_plan" name="columns[]" value="ojt_program.internship_plan" data-table="ojt_program">
+                            <label for="internship_plan">Internship Plan</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="requirements" name="columns[]" value="ojt_program.requirements" data-table="ojt_program">
+                            <label for="requirements">Requirements</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="notes" name="columns[]" value="ojt_program.notes" data-table="ojt_program">
+                            <label for="notes">Notes</label>
+                        </div>
+                    </div>
+            </div>
+              <!-- Display checkboxes for Companies table columns -->
+                <div class="table-container">
+                    <h5 class="table-header">Companies Table</h5>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="company_entry_id" name="columns[]" value="companies.company_entry_id" data-table="companies">
+                            <label for="company_entry_id">Company ID</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="company_name" name="columns[]" value="companies.company_name" data-table="companies">
+                            <label for="company_name">Company Name</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="moa" name="columns[]" value="companies.moa" data-table="companies">
+                            <label for="moa">MOA</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="date" name="columns[]" value="companies.date" data-table="companies">
+                            <label for="date">Date</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="notes" name="columns[]" value="companies.notes" data-table="companies">
+                            <label for="notes">Notes</label>
+                        </div>
+                    </div>
+                </div>
+              <!-- Requirements Table Selection -->
+                <div class="table-container">
+                    <h5 class="table-header">Requirements Table</h5>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="rq_id" name="columns[]" value="requirements.rq_id" data-table="requirements">
+                            <label for="rq_id">Requirement ID</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="company_entry_id_req" name="columns[]" value="requirements.company_entry_id" data-table="requirements">
+                            <label for="company_entry_id_req">Company ID</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="id_no_req" name="columns[]" value="requirements.id_no" data-table="requirements">
+                            <label for="id_no_req">Student ID</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="pc" name="columns[]" value="requirements.pc" data-table="requirements">
+                            <label for="pc">PC</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="sp" name="columns[]" value="requirements.sp" data-table="requirements">
+                            <label for="sp">SP</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="cogh" name="columns[]" value="requirements.cogh" data-table="requirements">
+                            <label for="cogh">CoGH</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="hi" name="columns[]" value="requirements.hi" data-table="requirements">
+                            <label for="hi">HI</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="tff" name="columns[]" value="requirements.tff" data-table="requirements">
+                            <label for="tff">TFF</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="sff" name="columns[]" value="requirements.sff" data-table="requirements">
+                            <label for="sff">SFF</label>
+                        </div>
+                    </div> 
+                    <div class="checkbox-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="coc" name="columns[]" value="requirements.coc" data-table="requirements">
+                            <label for="coc">COC</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="tr" name="columns[]" value="requirements.tr" data-table="requirements">
+                            <label for="tr">TR</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="htee" name="columns[]" value="requirements.htee" data-table="requirements">
+                            <label for="htee">HTEE</label>
+                        </div>
+                    </div> 
+                </div>
+          </div>
+          <!-- Filter Footer -->
+           <div class="modal-footer">
+                <button type="button" class="btn btn-success mt-3 float-end" id="applyFilter">Apply Filter</button>
+                <button type="button" class="btn btn-secondary" id="cancelFilter">Cancel</button>
+                <!-- Button to Open Sorting Section -->
+                <button type="button" class="btn btn-light" id="openSorting">Sort</button>
+            </div>
+        </div>
+  
+        <!-- Sorting Section -->
+        <div class="modal-sorting">
+          <!-- Sorting Header -->
+          <div class="modal-header">
+            <h5 class="modal-title" id="sortingModalLabel">Sort Results</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <!-- Sorting Body -->
+          <div class="modal-body">
+            <div class="sorting-container">
+                <h5 class="sort-header">ID</h5>
+                  <div class="sort-row">
+                    <div class="sort-check">
+                      <input class="sort-check-input" type="checkbox" value="ojt_program.id_no" id="sortById">
+                      <label class="sort-check-label" for="sortById">Stud ID</label>
+                    </div>
+                    <div class="sort-check">
+                      <input class="sort-check-input" type="checkbox" value="companies.company_entry_id" id="sortById">
+                      <label class="sort-check-label" for="sortById">Company ID</label>
+                    </div>
+                    <div class="sort-check">
+                      <input class="sort-check-input" type="checkbox" value="req_id" id="sortById">
+                      <label class="sort-check-label" for="sortById">Requirements ID</label>
+                    </div>
+                  </div>
               </div>
-              <button type="button" class="btn btn-secondary" id="revertButton">Revert</button>
-              <button type="submit" class="btn btn-success float-end">Run Filter</button>
-            </form>
+              <div class="sort-container">
+                <h5 class="sort-header">Academic Year</h5>
+                <div class="sort-row">
+                  <div class="sort-check">
+                    <input class="sort-check-input" type="checkbox" value="ojt_program.academic_year" id="sortById">
+                    <label class="sort-check-label" for="sortById">2020-2021</label>
+                  </div>
+                  <div class="sort-check">
+                    <input class="sort-check-input" type="checkbox" value="ojt_program.academic_year" id="sortById">
+                    <label class="sort-check-label" for="sortById">2021-2022</label>
+                  </div>
+                  <div class="sort-check">
+                    <input class="sort-check-input" type="checkbox" value="ojt_program.academic_year" id="sortById">
+                    <label class="sort-check-label" for="sortById">2022-2023</label>
+                  </div>
+                </div>
+              </div>
+              <div class="sort-container">
+                <h5 class="sort-header">Other Columns</h5>
+                <div class="sort-row">
+                    <div class="sort-check">
+                      <input class="sort-check-input" type="checkbox" value="ojt_program.program" id="sortById">
+                      <label class="sort-check-label" for="sortById">Program</label>
+                    </div>
+                    <div class="sort-check">
+                      <input class="sort-check-input" type="checkbox" value="ojt_program.yr_lvl" id="sortById">
+                      <label class="sort-check-label" for="sortById">Year Level</label>
+                    </div>
+                    <div class="sort-check">
+                      <input class="sort-check-input" type="checkbox" value="ojt_program.rendered_hours" id="sortById">
+                      <label class="sort-check-label" for="sortById">Rendered Hours</label>
+                    </div>
+                </div>
+                <div class="sort-row">
+                  <div class="sort-check">
+                    <input class="sort-check-input" type="checkbox" value="companies.moa" id="sortById">
+                    <label class="sort-check-label" for="sortById">MOA</label>
+                  </div>
+                  <div class="sort-check">
+                    <input class="sort-check-input" type="checkbox" value="ojt_program.requirements" id="sortById">
+                    <label class="sort-check-label" for="sortById">Requirements</label>
+                  </div>
+                  <div class="sort-check">
+                    <input class="sort-check-input" type="checkbox" value="ojt_program.start_date" id="sortById">
+                    <label class="sort-check-label" for="sortById">Start Date</label>
+                  </div>
+                </div>
+                <div class="sort-row">
+                  <div class="sort-check">
+                    <input class="sort-check-input" type="checkbox" value="ojt_program.end_date" id="sortById">
+                    <label class="sort-check-label" for="sortById">End Date</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Sorting Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="applySorting">Apply Sorting</button>
           </div>
         </div>
       </div>
     </div>
+</div>
+  
+  
+  
 
-    <table class="table table-hover text-center">
-      <thead class="table-active">
-        <tr>
-          <th class="sortable sort-id" scope="col">ID <i class="fas fa-sort sort-icon"></i></th>
-          <th scope="col">Building Name</th>
-          <th scope="col">Room Number</th>
-          <th scope="col">Subject Code</th>
-          <th class="sortable sort-date" scope="col">Date <i class="fas fa-sort sort-icon"></i></th>
-          <th class="sortable sort-time" scope="col">Time <i class="fas fa-sort sort-icon"></i></th>
-          <th scope="col" style="width: 12%">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php
-        $sql = "SELECT * FROM event_tbl e INNER JOIN subject_tbl s ON e.subject_id = s.subject_id";
-        $result = mysqli_query($conn, $sql);
-        while ($row = mysqli_fetch_assoc($result)) {
-          $eventDate = date("F d, Y", strtotime($row["event_date"]));
-          $eventTime = date("h:i A", strtotime($row["event_time"]));
-        ?>
-          <tr>
-            <td><?php echo $row["event_id"] ?></td>
-            <td><?php echo $row["building_name"] ?></td>
-            <td><?php echo $row["room_number"] ?></td>
-            <td><?php echo $row["subject_code"] ?></td>
-            <td><?php echo $eventDate ?></td>
-            <td><?php echo $eventTime ?></td>
-            <td>
-              <a class="edit-btn" href="edit_event.php?id=<?php echo $row["event_id"] ?>"><i class="fa-solid fa-pen-to-square hover-blue"></i></a>
-              <a class="edit-btn" href="delete_event.php?id=<?php echo $row["event_id"] ?>"><i class="fa-solid fa-trash hover-red"></i></a>
-            </td>
-          </tr>
-        <?php
-        }
-        ?>
-      </tbody>
-    </table>
-  </div>
+<div id="filterResultContainer" class="mt-4"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  <script src="js/particles.js"></script>
   <script src="js/app.js"></script>
-  <script src="js/bg.js"></script>
-  <script src="js/sort.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="js/filter.js"></script>
+
+
 
 </body>
 

@@ -6,94 +6,95 @@ session_start();
 
 if (isset($_POST['login'])) {
 
-	$user_id = mysqli_real_escape_string($conn, $_POST['user_id']);
-	$pass = md5($_POST['password']);
+    $user_id = pg_escape_string($conn, $_POST['user_id']);
+    $pass = md5($_POST['password']); // Note: Storing passwords as MD5 hashes is not secure, consider using more robust hashing methods like bcrypt.
 
-	$error = array();
+    $error = array();
 
-	if (empty($user_id)) {
-		$error[] = "User ID is required.";
-	}
+    if (empty($user_id)) {
+        $error[] = "User ID is required.";
+    }
 
-	if (empty($pass)) {
-		$error[] = "Password is required.";
-	}
+    if (empty($pass)) {
+        $error[] = "Password is required.";
+    }
 
-	$select = " SELECT * FROM user_tbl WHERE user_id = '$user_id' && password = '$pass' ";
+    $select = " SELECT * FROM user_tbl WHERE user_id = '$user_id' AND password = '$pass' ";
 
-	$result = mysqli_query($conn, $select);
+    $result = pg_query($conn, $select);
 
-	if (mysqli_num_rows($result) > 0) {
+    if (pg_num_rows($result) > 0) {
 
-		$row = mysqli_fetch_array($result);
+        $row = pg_fetch_assoc($result);
 
-		if ($row['user_type'] == 'instructor') {
+        if ($row['user_type'] == 'instructor') {
 
-			$_SESSION['instructor_name'] = $row['user_id'];
-			header('location:index_admin.php');
-		} elseif ($row['user_type'] == 'student') {
+            $_SESSION['instructor_name'] = $row['user_id'];
+            header('location:index_admin.php');
+            exit;
+        } elseif ($row['user_type'] == 'student') {
 
-			$_SESSION['student_name'] = $row['user_id'];
-			header('location:index_user.php');
-		}
-	} else {
-		$error[] = 'Incorrect email or password!';
-	}
+            $_SESSION['student_name'] = $row['user_id'];
+            header('location:index_user.php');
+            exit;
+        }
+    } else {
+        $error[] = 'Incorrect email or password!';
+    }
 } elseif (isset($_POST['register'])) {
 
-	$user_id = mysqli_real_escape_string($conn, $_POST['user_id']);
-	$email = mysqli_real_escape_string($conn, $_POST['email']);
-	$pass = md5($_POST['password']);
-	$cpass = md5($_POST['cpassword']);
-	$user_type = $_POST['user_type'];
+    $user_id = pg_escape_string($conn, $_POST['user_id']);
+    $email = pg_escape_string($conn, $_POST['email']);
+    $pass = md5($_POST['password']); // Same note about using stronger password hashing methods.
+    $cpass = md5($_POST['cpassword']);
+    $user_type = $_POST['user_type'];
 
-	$error = array();
+    $error = array();
 
-	if (empty($user_id)) {
-		$error[] = "User ID is required.";
-	}
+    if (empty($user_id)) {
+        $error[] = "User ID is required.";
+    }
 
-	if (empty($email)) {
-		$error[] = "Email is required.";
-	}
+    if (empty($email)) {
+        $error[] = "Email is required.";
+    }
 
-	if (empty($pass)) {
-		$error[] = "Password is required.";
-	}
+    if (empty($pass)) {
+        $error[] = "Password is required.";
+    }
 
-	if (empty($cpass)) {
-		$error[] = "Confirm Password is required.";
-	}
+    if (empty($cpass)) {
+        $error[] = "Confirm Password is required.";
+    }
 
+    $select = " SELECT * FROM user_tbl WHERE user_id = '$user_id'";
 
-	$select = " SELECT * FROM user_tbl WHERE user_id = '$user_id' && password = '$pass' ";
+    $result = pg_query($conn, $select);
 
-	$result = mysqli_query($conn, $select);
+    if (pg_num_rows($result) > 0) {
 
-	if (mysqli_num_rows($result) > 0) {
+        $error[] = 'User ID already exists!';
+    } else {
 
-		$error[] = 'User ID already exist!';
-	} else {
-
-		if ($pass != $cpass) {
-			$error[] = 'Passwords do not match.';
-		} else {
-			$insert = "INSERT INTO user_tbl(user_id, email, password, user_type) VALUES('$user_id','$email','$pass','$user_type')";
-			mysqli_query($conn, $insert);
-			$error[] = 'Successful! please log in.';
-			echo '<script type="text/JavaScript"> 
-			container.classList.remove("right-panel-active");
-			</script>';
-		}
-	}
+        if ($pass != $cpass) {
+            $error[] = 'Passwords do not match.';
+        } else {
+            $insert = "INSERT INTO user_tbl(user_id, email, password, user_type) VALUES('$user_id','$email','$pass','$user_type')";
+            pg_query($conn, $insert);
+            $error[] = 'Successful! please log in.';
+            echo '<script type="text/JavaScript"> 
+            container.classList.remove("right-panel-active");
+            </script>';
+        }
+    }
 }
 
 if (isset($error) && count($error) > 0) {
-	echo '<div class="error-container">';
-	foreach ($error as $errorMsg) {
-		echo '<div class="error-msg">' . $errorMsg . '</div>';
-	}
-	echo '</div>';
+    echo '<div class="error-container">';
+    foreach ($error as $errorMsg) {
+        echo '<div class="error-msg">' . $errorMsg . '</div>';
+    }
+    echo '</div>';
 }
 ?>
 <!DOCTYPE html>

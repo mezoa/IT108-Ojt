@@ -18,6 +18,7 @@ body {
   font-family: "Montserrat", sans-serif;
   height: 100vh;
   margin: 0px;
+  
 }
 
 a {
@@ -151,6 +152,7 @@ canvas {
   height: 100%;
   filter: saturate(0);
   margin: 0px;
+  
 }
 
 #particles-js {
@@ -160,9 +162,7 @@ canvas {
   height: 100%;
 }
 
-.isWhite {
-  color: white !important;
-}
+
 
 .sortable {
   cursor: pointer;
@@ -175,5 +175,95 @@ canvas {
   transform: translate(0, 0) !important;
   max-width: 450px !important; /* Adjust the value as per your requirement */
   min-width: 450px !important;
- margin-top: 50px !important;
+  margin-top: 50px !important;
+}
+
+.container {
+  max-width: 1900px; /* Adjust the value as per your preference */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container h2 {
+  font-size: 35px; /* Adjust the font size as needed */
+  color: #000000 !important;
+}
+
+/* Add margin between edit and delete icons */
+.edit-delete-icons {
+  position: relative;
+}
+
+.edit-delete-icons .edit-icon,
+.edit-delete-icons .delete-icon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* Adjust the position and add margin */
+.edit-delete-icons .edit-icon {
+  left: -35px; /* Adjust this value based on your preference */
+  margin-right: 10px; /* Add space between the icons */
+}
+
+.edit-delete-icons .delete-icon {
+  left: -15px; /* Adjust this value based on your preference */
+  margin-left: 10px; /* Add space between the icons */
+}
+
+/* Show edit and delete icons on hover */
+.record-row:hover .edit-delete-icons .edit-icon,
+.record-row:hover .edit-delete-icons .delete-icon {
+  display: inline-block;
+}
+
+/*Filter Modal */
+.scaled-content label,
+.scaled-content input[type="checkbox"] {
+  font-size: 0.8rem; /* Adjust font size for labels and checkboxes */
+}
+
+.scaled-footer .btn {
+  font-size: 0.9rem; /* Adjust font size for buttons in the footer */
+}
+
+.modal-lg {
+  max-width: 200% !important ; /* Adjust the maximum width as needed */
+}
+.checkbox-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.checkbox-group {
+  flex: 0 0 calc(33.33% - 10px); /* 33.33% width for 3 columns with margin */
+  margin: 5px; /* Adjust margin between columns */
+}
+
+/*custom_query.php*/
+/* CSS adjustments for tables within the filter modal */
+.filter-table {
+  width: 100%;
+  overflow-x: auto;
+  max-height: 500px; /* Adjust the maximum height as needed */
+}
+
+.filter-table table {
+  max-width: 100%;
+}
+
+.filter-table th,
+.filter-table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/*Modal Container*/
+.custom-modal-dialog {
+  max-width: 90%; /* Adjust this value according to your requirement */
 }
