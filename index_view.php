@@ -184,9 +184,6 @@ function viewReqs($conn) {
 </head>
 
 <body>
-  <div id="particles-js"></div>
-  <canvas id="canvas" width="32" height="32"></canvas>
-
   <header>
     <div class="user-info">
       <h1><span><?php echo $_SESSION['instructor_name'] ?></span></h1>
@@ -259,7 +256,6 @@ function viewReqs($conn) {
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="js/edit_del.js"></script>
-  <script src="js/app.js"></script>
   <script src="js/sort.js"></script>
   
 </body>
