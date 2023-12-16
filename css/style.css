@@ -267,3 +267,23 @@ canvas {
 .custom-modal-dialog {
   max-width: 90%; /* Adjust this value according to your requirement */
 }
+
+/*Table for Views*/
+/* CSS for responsiveness */
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+  margin-bottom: 15px;
+  max-height: 500px;
+}
+
+.responsive-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.responsive-table th,
+.responsive-table td {
+  padding: 12px;
+  text-align: center;
+}

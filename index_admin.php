@@ -21,6 +21,7 @@ if (!$result) {
   header("location:index_admin.php?error=" . urlencode($errorMessage));
   exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -69,7 +70,7 @@ if (!$result) {
   <!-- Customized Filter Column Selection Modal -->
   <!-- Filter and Sorting Container Modal -->
 <div class="modal fade" id="filterSortingContainer" tabindex="-1" aria-labelledby="filterSortingContainerLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg custom-modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <!-- Filter Section -->
         <div class="modal-filter">
@@ -354,15 +355,78 @@ if (!$result) {
     </div>
 </div>
   
-  
+<!-- View Button -->
+<div class="modal fade" id="viewQuery" tabindex="-1" aria-labelledby="viewQueryLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewQueryLabel">Select View</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="viewSelection" class="form-label">Select View:</label>
+          <select class="form-select" id="viewSelection" required>
+            <option value="">-- Select View --</option>
+            <option value="view_studrec">View Student Records</option>
+            <option value="view_company">View Company Partners</option>
+          </select>
+        </div>
+
+        <!-- View 1: Student Records Dropdowns -->
+        <div id="viewStudrecDropdown" style="display: none;">
+          <div class="mb-3">
+            <label for="academicYear" class="form-label">Select Academic Year:</label>
+            <select class="form-select" id="academicYear" required>
+              <option value="">-- Select Academic Year --</option>
+              <option value="2020_2021">View Academic Year 2020-2021</option>
+              <option value="2021_2022">View Academic Year 2021-2022</option>
+              <option value="2022_2023">View Academic Year 2022-2023</option>
+            </select>
+          </div>
+        </div>
+
+      <!-- View 2: Company Partners Input Fields -->
+      <div id="viewCompanyDropdown" style="display: none;">
+        <div class="mb-3">
+          <label for="companyNameInput" class="form-label">Enter Company Name:</label>
+          <input type="text" class="form-control" id="companyNameInput" placeholder="Enter Company Name">
+        </div>
+        <div class="mb-3">
+          <label for="companyYear" class="form-label">Select Academic Year:</label>
+          <!-- The academic year selection remains unchanged -->
+          <select class="form-select" id="companyYear" required>
+            <option value="">-- Select Academic Year --</option>
+            <option value="2020-2021">View by Company 2020-2021</option>
+            <option value="2021-2022">View by Company 2021-2022</option>
+            <option value="2022-2023">View by Company 2022-2023</option>
+            <option value="N/A">N/A</option>
+          </select>
+        </div>
+      </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <!-- Add logic to trigger the data fetching based on the selected view -->
+        <button type="button" class="btn btn-primary" id="fetchDataButton">Fetch Data</button>
+      </div>
+    </div>
+  </div>
+</div>
   
 
 <div id="filterResultContainer" class="mt-4"></div>
+<div id="resultSection"></div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
   <script src="js/app.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="js/filter.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="js/view_admin.js"></script>
+
 
 
 

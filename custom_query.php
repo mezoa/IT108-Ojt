@@ -37,7 +37,7 @@ function generateTableHTML($result)
 {
     $tableHTML = '<div class="table-responsive filter-table">'; // Add a unique class for tables within the filter modal
     $tableHTML .= '<table class="table table-hover text-center">';
-    $tableHTML .= '<thead><tr>';
+    $tableHTML .= '<thead><tr style="background-color: #f2f2f2;">';
 
     // Display column headers
     $numFields = pg_num_fields($result);
@@ -45,7 +45,6 @@ function generateTableHTML($result)
         $fieldName = pg_field_name($result, $i);
         $tableHTML .= "<th>$fieldName</th>";
     }
-
     $tableHTML .= '</tr></thead><tbody>';
 
     // Fetch and display query results
