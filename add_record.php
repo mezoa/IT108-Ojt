@@ -51,7 +51,7 @@ if (isset($_POST["submit"])) {
          var tableAttributes = {
             "ojt_program": ["id_no", "last_name", "first_name", "middle_name", "program", "yr_lvl", "email", "contact_no", "company_entry_id", "academic_year", "status", "start_date", "end_date", "rendered_hours", "internship_plan", "requirements", "notes"],
             "companies": ["company_name", "moa", "date", "notes"],
-            "requirements": ["rq_id", "ojt_code", "company_entry_id", "id_no", "pc", "sp", "cogh", "hi", "tff", "sff", "coc", "tr", "htee"]
+            "requirements": ["rq_id", "company_entry_id", "id_no", "pc", "sp", "cogh", "hi", "tff", "sff", "coc", "tr", "htee"]
             // Add more attributes for other tables
          };
 

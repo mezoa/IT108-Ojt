@@ -370,6 +370,7 @@ if (!$result) {
             <option value="">-- Select View --</option>
             <option value="view_studrec">View Student Records</option>
             <option value="view_company">View Company Partners</option>
+            <option value="view_comstud">View Deployed Students</option>
           </select>
         </div>
 
@@ -386,24 +387,27 @@ if (!$result) {
           </div>
         </div>
 
-      <!-- View 2: Company Partners Input Fields -->
-      <div id="viewCompanyDropdown" style="display: none;">
-        <div class="mb-3">
-          <label for="companyNameInput" class="form-label">Enter Company Name:</label>
-          <input type="text" class="form-control" id="companyNameInput" placeholder="Enter Company Name">
+        <!-- View 2: Company Partners Input Fields -->
+        <div id="viewCompanyDropdown" style="display: none;">
+          <div class="mb-3">
+            <label for="companyYear" class="form-label">Select Academic Year:</label>
+            <select class="form-select" id="companyYear" required>
+              <option value="">-- Select Academic Year --</option>
+              <option value="2020-2021">View by Company 2020-2021</option>
+              <option value="2021-2022">View by Company 2021-2022</option>
+              <option value="2022-2023">View by Company 2022-2023</option>
+              <option value="N/A">N/A</option>
+            </select>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="companyYear" class="form-label">Select Academic Year:</label>
-          <!-- The academic year selection remains unchanged -->
-          <select class="form-select" id="companyYear" required>
-            <option value="">-- Select Academic Year --</option>
-            <option value="2020-2021">View by Company 2020-2021</option>
-            <option value="2021-2022">View by Company 2021-2022</option>
-            <option value="2022-2023">View by Company 2022-2023</option>
-            <option value="N/A">N/A</option>
-          </select>
+
+        <!-- View 3: Student Deployed in the Company -->
+        <div id="viewComStudDropdown" style="display: none;">
+          <div class="mb-3">
+            <label for="companyName" class="form-label">Enter Company Name:</label>
+            <input type="text" class="form-control" id="companyNameInput" placeholder="Enter Company Name">
+          </div>
         </div>
-      </div>
 
       </div>
       <div class="modal-footer">
