@@ -33,6 +33,7 @@ if (!isset($_SESSION['student_name'])) {
       <p>Student</p>
     </div>
     <div class="spacer"></div>
+    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#viewModal">View</button>
     <a href="logout.php" class="ghost">Logout</a>
   </header>
   <div class="container">
@@ -86,6 +87,12 @@ if (!isset($_SESSION['student_name'])) {
             FROM ojt_program AS o
             JOIN companies AS c ON o.company_entry_id = c.company_entry_id";
 
+        // Check if a specific academic year is requested
+        if (isset($_GET['academic_year'])) {
+          $academicYear = $_GET['academic_year'];
+          $sql .= " WHERE o.academic_year = '$academicYear'";
+        }
+
         $result = pg_query($conn, $sql); // Use pg_query for PostgreSQL
 
         while ($row = pg_fetch_assoc($result)) {
@@ -115,11 +122,58 @@ if (!isset($_SESSION['student_name'])) {
     </table>
   </div>
 
+  <!-- View Modal -->
+ <!-- View Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewModalLabel">View Academic Year Record</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="academicYearSelect">Select Academic Year:</label>
+        <select id="academicYearSelect">
+          <option value="">-- Select Academic Year --</option>
+          <option value="stud2020_2021">View Academic Year 2020-2021</option>
+          <option value="stud2021_2022">View Academic Year 2021-2022</option>
+          <option value="stud2022_2023">View Academic Year 2022-2023</option>
+        </select>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="fetchData">Fetch Data</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+  // Get the select element
+  var academicYearSelect = document.getElementById('academicYearSelect');
+  var fetchDataButton = document.getElementById('fetchData');
+
+  // Add an event listener for the click event to the Fetch Data button
+  fetchDataButton.addEventListener('click', function() {
+    // Get the selected academic year
+    var academicYear = academicYearSelect.value;
+
+    // Make an AJAX request to a PHP script that fetches the data for the selected academic year
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'fetch_foruser.php?academic_year=' + academicYear, true);
+    xhr.onload = function() {
+      if (this.status == 200) {
+        // Insert the returned HTML into the table
+        document.querySelector('.table tbody').innerHTML = this.responseText;
+      }
+    };
+    xhr.send();
+  });
+</script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
   <script src="js/particles.js"></script>
   <script src="js/app.js"></script>
   <script src="js/sort.js"></script>
-  <script src="js/bg.js"></script>
 </body>
 
 </html>
