@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   var applyFilterBtn = document.getElementById("applyFilter");
   var cancelFilterBtn = document.getElementById("cancelbtn");
-  var applySortingBtn = document.getElementById("applySorting");
 
   if (cancelFilterBtn) {
     cancelFilterBtn.addEventListener('click', function () {
@@ -49,16 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
   });
 
-  applySortingBtn.addEventListener('click', function () {
-    var selectedSortOptions = getSelectedSortOptions();
-
-    if (selectedSortOptions.length > 0) {
-      // You can handle the selected sorting options here
-      console.log(selectedSortOptions); // Placeholder logic, replace with sorting implementation
-    } else {
-      console.log("No sorting options selected");
-    }
-  });
+  
 
 
   function getSelectedColumns() {
@@ -135,68 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return customQuery;
   }
 
-  //Sorting
-  applySortingBtn.addEventListener('click', function () {
-    var selectedSortOptions = getSelectedSortOptions();
-  
-    if (selectedSortOptions.length > 0) {
-      // Construct sorting query based on selected attributes
-      var sortingQuery = buildSortingQuery(selectedSortOptions);
-  
-      // Fetch data based on the modified query
-      var formData = new FormData();
-      formData.append('sortingQuery', sortingQuery);
-  
-      fetch('custom_query.php', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok.');
-        }
-        return response.text(); // Assuming the response should be text
-      })
-      .then(data => {
-        // Display data in the filterResultContainer or handle as needed
-        document.getElementById("filterResultContainer").innerHTML = data;
-      })
-      .catch(error => console.error('Error:', error));
-    } else {
-      console.log("No sorting options selected");
-    }
-  });
-
-  function buildSortingQuery(selectedSortOptions) {
-  // Construct an ORDER BY clause based on selected attributes
-  var orderByClause = 'ORDER BY ';
-
-  // Join selected attributes for sorting
-  var orderByAttributes = selectedSortOptions.join(', ');
-
-  // Customize the order based on ascending or descending selection
-  // Here, assuming all selected attributes are sorted in ascending order
-  orderByClause += orderByAttributes + ' ASC';
-
-  // You may customize the above logic based on your application's requirements
-
-  return orderByClause;
-}
-
-function getSelectedSortOptions() {
-  var selectedSortOptions = [];
-  // Logic to retrieve selected sorting options (similar to getSelectedColumns)
-
-  // Example logic:
-  var sortCheckboxes = document.querySelectorAll('#sortingContainer input[type="checkbox"]:checked');
-  sortCheckboxes.forEach(checkbox => {
-    var checkboxValue = checkbox.value;
-    if (checkboxValue) {
-      selectedSortOptions.push(checkboxValue);
-    }
-  });
-
-  return selectedSortOptions;
-}
+ 
 
 });

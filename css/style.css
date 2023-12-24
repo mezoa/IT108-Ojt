@@ -215,16 +215,17 @@ canvas {
 /*Filter Modal */
 .scaled-content label,
 .scaled-content input[type="checkbox"] {
-  font-size: 0.8rem; /* Adjust font size for labels and checkboxes */
+  font-size: 1rem; /* Adjust font size for labels and checkboxes */
 }
 
 .scaled-footer .btn {
-  font-size: 0.9rem; /* Adjust font size for buttons in the footer */
+  font-size: 1rem; /* Adjust font size for buttons in the footer */
 }
 
 .modal-lg {
-  max-width: 200% !important ; /* Adjust the maximum width as needed */
+  max-width: 100vw !important; /* Adjust the maximum width as needed */
 }
+
 .checkbox-row {
   display: flex;
   flex-wrap: wrap;
@@ -233,6 +234,10 @@ canvas {
 .checkbox-group {
   flex: 0 0 calc(33.33% - 10px); /* 33.33% width for 3 columns with margin */
   margin: 5px; /* Adjust margin between columns */
+}
+
+.custom-modal-width {
+  max-width: 90%;
 }
 
 /*custom_query.php*/
@@ -258,4 +263,24 @@ canvas {
 /*Modal Container*/
 .custom-modal-dialog {
   max-width: 90%; /* Adjust this value according to your requirement */
+}
+
+/*Table for Views*/
+/* CSS for responsiveness */
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+  margin-bottom: 15px;
+  max-height: 500px;
+}
+
+.responsive-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.responsive-table th,
+.responsive-table td {
+  padding: 12px;
+  text-align: center;
 }
