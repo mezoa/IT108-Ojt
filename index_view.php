@@ -6,17 +6,18 @@ session_start();
 if (!isset($_SESSION['instructor_name'])) {
   header('location:form.php');
 }
-  $conn = pg_connect($connection_string); // Establish a PostgreSQL database connection
+$conn = pg_connect($connection_string); // Establish a PostgreSQL database connection
 
-  function viewOjtRecords($conn) {
-    $ojt_program_query = "SELECT * FROM ojt_program;";
-    $ojt_program_result = pg_query($conn, $ojt_program_query);
-  
-    if ($ojt_program_result) {
-        echo "<h2>OJT Program Table</h2>";
-        echo "<div class='table-responsive'>";
-        echo "<table class='table table-hover text-center'>";
-        echo "<thead class='table-active'>
+function viewOjtRecords($conn)
+{
+  $ojt_program_query = "SELECT * FROM ojt_program;";
+  $ojt_program_result = pg_query($conn, $ojt_program_query);
+
+  if ($ojt_program_result) {
+    echo "<h2>OJT Program Table</h2>";
+    echo "<div class='table-responsive'>";
+    echo "<table class='table table-dark table-hover text-center table-striped'>";
+    echo "<thead>
                 <tr>
                     <th data-column='id_no'>Student ID</th>
                     <th data-column='last_name'>Last Name</th>
@@ -38,47 +39,48 @@ if (!isset($_SESSION['instructor_name'])) {
             </thead>
             <tbody>";
 
-        while ($row = pg_fetch_assoc($ojt_program_result)) {
-            echo "<tr class='record-row'>";
-            echo "<td data-column='id_no'>" . $row['id_no'] . "</td>";
-            echo "<td data-column='last_name'>" . $row['last_name'] . "</td>";
-            echo "<td data-column='first_name'>" . $row['first_name'] . "</td>";
-            echo "<td data-column='middle_name'>" . $row['middle_name'] . "</td>";
-            echo "<td data-column='program'>" . $row['program'] . "</td>";
-            echo "<td data-column='yr_lvl'>" . $row['yr_lvl'] . "</td>";
-            echo "<td data-column='academic_year'>" . $row['academic_year'] . "</td>";
-            echo "<td data-column='company_entry_id'>" . $row['company_entry_id'] . "</td>";
-            echo "<td data-column='status'>" . $row['status'] . "</td>";
-            echo "<td data-column='start_date'>" . $row['start_date'] . "</td>";
-            echo "<td data-column='end_date'>" . $row['end_date'] . "</td>";
-            echo "<td data-column='rendered_hours'>" . $row['rendered_hours'] . "</td>";
-            echo "<td data-column='internship_plan'>" . $row['internship_plan'] . "</td>";
-            echo "<td data-column='requirements'>" . $row['requirements'] . "</td>";
-            echo "<td data-column='notes'>" . $row['notes'] . "</td>";
-            echo "<td class='edit-delete-icons'>";
-              echo "<span class='edit-icon' data-id='" . $row['id_no'] . "'data-table='ojt_program'><i class='fas fa-edit'></i></span>";
-              echo "<span class='delete-icon' data-id='" . $row['id_no'] . "'data-table='ojt_program'><i class='fas fa-trash'></i></span>";
-            echo "</td>";
+    while ($row = pg_fetch_assoc($ojt_program_result)) {
+      echo "<tr class='record-row'>";
+      echo "<td data-column='id_no'>" . $row['id_no'] . "</td>";
+      echo "<td data-column='last_name'>" . $row['last_name'] . "</td>";
+      echo "<td data-column='first_name'>" . $row['first_name'] . "</td>";
+      echo "<td data-column='middle_name'>" . $row['middle_name'] . "</td>";
+      echo "<td data-column='program'>" . $row['program'] . "</td>";
+      echo "<td data-column='yr_lvl'>" . $row['yr_lvl'] . "</td>";
+      echo "<td data-column='academic_year'>" . $row['academic_year'] . "</td>";
+      echo "<td data-column='company_entry_id'>" . $row['company_entry_id'] . "</td>";
+      echo "<td data-column='status'>" . $row['status'] . "</td>";
+      echo "<td data-column='start_date'>" . $row['start_date'] . "</td>";
+      echo "<td data-column='end_date'>" . $row['end_date'] . "</td>";
+      echo "<td data-column='rendered_hours'>" . $row['rendered_hours'] . "</td>";
+      echo "<td data-column='internship_plan'>" . $row['internship_plan'] . "</td>";
+      echo "<td data-column='requirements'>" . $row['requirements'] . "</td>";
+      echo "<td data-column='notes'>" . $row['notes'] . "</td>";
+      echo "<td class='edit-delete-icons'>";
+      echo "<span class='edit-icon' data-id='" . $row['id_no'] . "'data-table='ojt_program'><i class='fas fa-edit'></i></span>";
+      echo "<span class='delete-icon' data-id='" . $row['id_no'] . "'data-table='ojt_program'><i class='fas fa-trash'></i></span>";
+      echo "</td>";
 
-            echo "</tr>";
-        }
-
-        echo "</tbody></table></div>";
-    } else {
-        echo "Error retrieving records: " . pg_last_error($conn);
+      echo "</tr>";
     }
+
+    echo "</tbody></table></div>";
+  } else {
+    echo "Error retrieving records: " . pg_last_error($conn);
+  }
 }
 
 
-function viewCompanies($conn) {
+function viewCompanies($conn)
+{
   $companies_query = "SELECT * FROM companies";
   $companies_result = pg_query($conn, $companies_query);
 
   if ($companies_result) {
-      echo "<h2>Companies</h2>";
-      echo "<div class='table-responsive'>";
-      echo "<table class='table table-hover text-center'>";
-      echo "<thead class='table-active'>
+    echo "<h2>Companies</h2>";
+    echo "<div class='table-responsive'>";
+    echo "<table class='table table-dark table-hover text-center table-striped'>";
+    echo "<thead>
               <tr>
                   <th data-column='company_entry_id'>Company ID</th>
                   <th data-column='company_name'>Company Name</th>
@@ -90,36 +92,37 @@ function viewCompanies($conn) {
           </thead>
           <tbody>";
 
-      while ($row = pg_fetch_assoc($companies_result)) {
-          echo "<tr class='record-row'>";
-          echo "<td data-column='company_entry_id'>" . $row['company_entry_id'] . "</td>";
-          echo "<td data-column='company_name'>" . $row['company_name'] . "</td>";
-          echo "<td data-column='moa'>" . $row['moa'] . "</td>";
-          echo "<td data-column='date'>" . $row['date'] . "</td>";
-          echo "<td data-column='notes'>" . $row['notes'] . "</td>";
-          echo "<td class='edit-delete-icons'>";
-          echo "<span class='edit-icon' data-id='" . $row['company_entry_id'] . "'data-table='companies'><i class='fas fa-edit'></i></span>";
-          echo "<span class='delete-icon' data-id='" . $row['company_entry_id'] . "'data-table='companies'><i class='fas fa-trash'></i></span>";
-          echo "</td>";
-          echo "</tr>";
-      }
+    while ($row = pg_fetch_assoc($companies_result)) {
+      echo "<tr class='record-row'>";
+      echo "<td data-column='company_entry_id'>" . $row['company_entry_id'] . "</td>";
+      echo "<td data-column='company_name'>" . $row['company_name'] . "</td>";
+      echo "<td data-column='moa'>" . $row['moa'] . "</td>";
+      echo "<td data-column='date'>" . $row['date'] . "</td>";
+      echo "<td data-column='notes'>" . $row['notes'] . "</td>";
+      echo "<td class='edit-delete-icons'>";
+      echo "<span class='edit-icon' data-id='" . $row['company_entry_id'] . "'data-table='companies'><i class='fas fa-edit'></i></span>";
+      echo "<span class='delete-icon' data-id='" . $row['company_entry_id'] . "'data-table='companies'><i class='fas fa-trash'></i></span>";
+      echo "</td>";
+      echo "</tr>";
+    }
 
-      echo "</tbody></table></div>";
+    echo "</tbody></table></div>";
   } else {
-      echo "Error retrieving records: " . pg_last_error($conn);
+    echo "Error retrieving records: " . pg_last_error($conn);
   }
 }
 
 
-function viewReqs($conn) {
+function viewReqs($conn)
+{
   $requirements_query = "SELECT * FROM requirements";
   $requirements_result = pg_query($conn, $requirements_query);
 
   if ($requirements_result) {
-      echo "<h2>Requirements</h2>";
-      echo "<div class='table-responsive'>";
-      echo "<table class='table table-hover text-center'>";
-      echo "<thead class='table-active'>
+    echo "<h2>Requirements</h2>";
+    echo "<div class='table-responsive'>";
+    echo "<table class='table table-dark table-hover text-center table-striped'>";
+    echo "<thead>
               <tr>
                   <th data-column='rq_id'>Req ID</th>
                   <th data-column='company_entry_id'>Company ID</th>
@@ -138,35 +141,35 @@ function viewReqs($conn) {
           </thead>
           <tbody>";
 
-      while ($row = pg_fetch_assoc($requirements_result)) {
-          echo "<tr class='record-row'>";
-          echo "<td data-column='rq_id'>" . $row['rq_id'] . "</td>";
-          echo "<td data-column='company_entry_id'>" . $row['company_entry_id'] . "</td>";
-          echo "<td data-column='id_no'>" . $row['id_no'] . "</td>";
-          echo "<td data-column='pc'><input type='checkbox' " . ($row['pc'] === 't' ? 'checked' : '') . " disabled></td>";
-          echo "<td data-column='sp'><input type='checkbox' " . ($row['sp'] === 't' ? 'checked' : '') . " disabled></td>";
-          echo "<td data-column='cogh'><input type='checkbox' " . ($row['cogh'] === 't' ? 'checked' : '') . " disabled></td>";
-          echo "<td data-column='hi'><input type='checkbox' " . ($row['hi'] === 't' ? 'checked' : '') . " disabled></td>";
-          echo "<td data-column='tff'><input type='checkbox' " . ($row['tff'] === 't' ? 'checked' : '') . " disabled></td>";
-          echo "<td data-column='sff'><input type='checkbox' " . ($row['sff'] === 't' ? 'checked' : '') . " disabled></td>";
-          echo "<td data-column='coc'><input type='checkbox' " . ($row['coc'] === 't' ? 'checked' : '') . " disabled></td>";
-          echo "<td data-column='tr'><input type='checkbox' " . ($row['tr'] === 't' ? 'checked' : '') . " disabled></td>";
-          echo "<td data-column='htee'><input type='checkbox' " . ($row['htee'] === 't' ? 'checked' : '') . " disabled></td>";
-          echo "<td class='edit-delete-icons'>";
-          echo "<span class='edit-icon' data-id='" . $row['rq_id'] . "'data-table='requirements'><i class='fas fa-edit'></i></span>";
-          echo "<span class='delete-icon' data-id='" . $row['rq_id'] . "'data-table='requirements'><i class='fas fa-trash'></i></span>";
-          echo "</td>";
-          echo "</tr>";
-      }
+    while ($row = pg_fetch_assoc($requirements_result)) {
+      echo "<tr class='record-row'>";
+      echo "<td data-column='rq_id'>" . $row['rq_id'] . "</td>";
+      echo "<td data-column='company_entry_id'>" . $row['company_entry_id'] . "</td>";
+      echo "<td data-column='id_no'>" . $row['id_no'] . "</td>";
+      echo "<td data-column='pc'><input type='checkbox' " . ($row['pc'] === 't' ? 'checked' : '') . " disabled></td>";
+      echo "<td data-column='sp'><input type='checkbox' " . ($row['sp'] === 't' ? 'checked' : '') . " disabled></td>";
+      echo "<td data-column='cogh'><input type='checkbox' " . ($row['cogh'] === 't' ? 'checked' : '') . " disabled></td>";
+      echo "<td data-column='hi'><input type='checkbox' " . ($row['hi'] === 't' ? 'checked' : '') . " disabled></td>";
+      echo "<td data-column='tff'><input type='checkbox' " . ($row['tff'] === 't' ? 'checked' : '') . " disabled></td>";
+      echo "<td data-column='sff'><input type='checkbox' " . ($row['sff'] === 't' ? 'checked' : '') . " disabled></td>";
+      echo "<td data-column='coc'><input type='checkbox' " . ($row['coc'] === 't' ? 'checked' : '') . " disabled></td>";
+      echo "<td data-column='tr'><input type='checkbox' " . ($row['tr'] === 't' ? 'checked' : '') . " disabled></td>";
+      echo "<td data-column='htee'><input type='checkbox' " . ($row['htee'] === 't' ? 'checked' : '') . " disabled></td>";
+      echo "<td class='edit-delete-icons'>";
+      echo "<span class='edit-icon' data-id='" . $row['rq_id'] . "'data-table='requirements'><i class='fas fa-edit'></i></span>";
+      echo "<span class='delete-icon' data-id='" . $row['rq_id'] . "'data-table='requirements'><i class='fas fa-trash'></i></span>";
+      echo "</td>";
+      echo "</tr>";
+    }
 
-      echo "</tbody></table></div>";
+    echo "</tbody></table></div>";
   } else {
-      echo "Error retrieving records: " . pg_last_error($conn);
+    echo "Error retrieving records: " . pg_last_error($conn);
   }
 }
 ?>
 
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -174,7 +177,7 @@ function viewReqs($conn) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="assets/icon.ico" type="image/x-icon">
-	<link rel="shortcut icon" href="assets/icon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="assets/icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -186,48 +189,48 @@ function viewReqs($conn) {
 <body>
   <header>
     <div class="user-info">
-      <h1><span><?php echo $_SESSION['instructor_name'] ?></span></h1>
+      <h1><?php echo $_SESSION['instructor_name'] ?></h1>
       <p>Instructor</p>
     </div>
     <div class="spacer"></div>
-    <a href="#" class="ghost" data-bs-toggle="modal" data-bs-target="#importModal">Import Data</a>
-    <a href="add_record.php" class="ghost">Add Event</a>
-    <a href="index_admin.php" class="ghost">Return</a>
+    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#importModal">Import Data</button>
+    <a href="add_record.php" class="btn btn-dark" role="button">Add Record</a>
+    <a href="index_admin.php" class="btn btn-danger" role="button">&#10006;</a>
   </header>
 
   <!-- Import Modal -->
   <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content text-center">
-            <div class="modal-header">
-              <h5 class="modal-title" id="importModalLabel">Import Excel File</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-header">
+          <h5 class="modal-title" id="importModalLabel">Import Excel File</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="import_record.php" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="file" class="form-label">Choose Excel File:</label>
+              <input type="file" class="form-control" id="file" name="file" accept=".xlsx, .xls">
             </div>
-            <div class="modal-body">
-              <form action="import_record.php" method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                  <label for="file" class="form-label">Choose Excel File:</label>
-                  <input type="file" class="form-control" id="file" name="file" accept=".xlsx, .xls">
-                </div>
-                <div class="mb-3">
-                  <label for="importType" class="form-label">Select Import Type:</label>
-                  <select class="form-select" id="importType" name="importType">
-                    <option value="ojt_program">OJT Program</option>
-                    <option value="companies">Companies</option>
-                  </select>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary" name="submit">Import</button>
-                </div>
-              </form>
+            <div class="mb-3">
+              <label for="importType" class="form-label">Select Import Type:</label>
+              <select class="form-select" id="importType" name="importType">
+                <option value="ojt_program">OJT Program</option>
+                <option value="companies">Companies</option>
+              </select>
             </div>
-          </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" name="submit">Import</button>
+            </div>
+          </form>
         </div>
       </div>
-    
+    </div>
+  </div>
 
-  
+
+
   <div class="container">
     <?php
     if (isset($_GET["msg"])) {
@@ -247,7 +250,7 @@ function viewReqs($conn) {
       viewReqs($conn);
       ?>
     </div>
-  
+
   </div>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -256,8 +259,7 @@ function viewReqs($conn) {
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="js/edit_del.js"></script>
-  <script src="js/sort.js"></script>
-  
+
 </body>
 
 </html>

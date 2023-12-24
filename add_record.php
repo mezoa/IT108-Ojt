@@ -38,7 +38,7 @@ if (isset($_POST["submit"])) {
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="icon" href="assets/icon.ico" type="image/x-icon">
-	<link rel="shortcut icon" href="assets/icon.ico" type="image/x-icon">
+   <link rel="shortcut icon" href="assets/icon.ico" type="image/x-icon">
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
    <link rel="stylesheet" href="css/style.css">
@@ -52,7 +52,6 @@ if (isset($_POST["submit"])) {
             "ojt_program": ["id_no", "last_name", "first_name", "middle_name", "program", "yr_lvl", "email", "contact_no", "company_entry_id", "academic_year", "status", "start_date", "end_date", "rendered_hours", "internship_plan", "requirements", "notes"],
             "companies": ["company_name", "moa", "date", "notes"],
             "requirements": ["rq_id", "company_entry_id", "id_no", "pc", "sp", "cogh", "hi", "tff", "sff", "coc", "tr", "htee"]
-            // Add more attributes for other tables
          };
 
          var attributes = tableAttributes[selectedTable];
@@ -60,7 +59,7 @@ if (isset($_POST["submit"])) {
          var attributeInputs = document.getElementById("attribute_inputs");
          attributeInputs.innerHTML = "";
 
-         attributes.forEach(function (attribute) {
+         attributes.forEach(function(attribute) {
             var inputField = document.createElement("div");
             inputField.classList.add("mb-3");
             inputField.innerHTML = `
@@ -83,18 +82,16 @@ if (isset($_POST["submit"])) {
 <body>
    <header>
       <div class="user-info">
-         <h1><span><?php echo $_SESSION['instructor_name'] ?></span></h1>
+         <h1><?php echo $_SESSION['instructor_name'] ?></h1>
          <p>Instructor</p>
       </div>
       <div class="spacer"></div>
-      <a href="edit_record.php" class="ghost">Edit Event</a>
-      <a href="delete_record.php" class="ghost">Delete Event</a>
-      <a href="index_view.php" class="ghost">Return</a>
+      <a href="index_view.php" class="btn btn-danger" role="button">&#10006;</a>
    </header>
 
    <div class="container isWhite">
       <div class="text-center mb-4">
-         <h4>Add Event to Database</h4>
+         <h4>Add Record</h4>
       </div>
 
       <div class="container d-flex justify-content-center">
@@ -105,7 +102,6 @@ if (isset($_POST["submit"])) {
                   <option value="ojt_program">OJT Program</option>
                   <option value="companies">Companies</option>
                   <option value="requirements">Requirements</option>
-                  <!-- Add more options as per your tables -->
                </select>
             </div>
 

@@ -165,7 +165,7 @@ if (isset($error) && count($error) > 0) {
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <button type="button" class="btn btn-ghost" id="register-btn">Register</button>
-                            <button type="submit" class="btn btn-secondary" name="login-submit">Login</button>
+                            <button type="submit" class="btn btn-dark" name="login-submit">Login</button>
                         </div>
                     </form>
 
@@ -195,7 +195,7 @@ if (isset($error) && count($error) > 0) {
                         </div>
                         <div class="d-flex justify-content-between">
                             <button type="button" class="btn btn-ghost" id="login-btn">Login</button>
-                            <button type="submit" class="btn btn-secondary" name="register-submit">Register</button>
+                            <button type="submit" class="btn btn-dark" name="register-submit">Register</button>
                         </div>
                     </form>
                 </div>
