@@ -2,9 +2,9 @@
 <?php
 $host = 'localhost';
 $port = '5432';
-$dbname = 'OJTmanagementSystem';
+$dbname = 'ojt';
 $user = 'postgres';
-$password = 'admin';
+$password = 'asd123!A';
 
 $connection_string = "host=$host port=$port dbname=$dbname user=$user password=$password";
 

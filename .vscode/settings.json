@@ -2,4 +2,12 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[php]": {
     "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  "editor.formatOnSave": true, // Enable formatting on save for all languages
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "vscode.stylelint"
+  }
 }

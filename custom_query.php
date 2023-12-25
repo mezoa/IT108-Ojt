@@ -36,8 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function generateTableHTML($result)
 {
     $tableHTML = '<div class="table-responsive filter-table">'; // Add a unique class for tables within the filter modal
-    $tableHTML .= '<table class="table table-hover text-center">';
-    $tableHTML .= '<thead><tr style="background-color: #f2f2f2;">';
+    $tableHTML .= '<table class="table table-dark table-hover text-center table-striped">';
+    $tableHTML .= '<thead><tr>';
 
     // Display column headers
     $numFields = pg_num_fields($result);
@@ -69,4 +69,3 @@ function generateTableHTML($result)
 
     return $tableHTML;
 }
-?>
