@@ -1,6 +1,32 @@
 <?php
 include "db_config.php";
 
+session_start();
+
+// Check if the user is logged in and has a specific role
+if (!isset($_SESSION['instructor_name']) && !isset($_SESSION['assistant_name']) && !isset($_SESSION['student_name'])) {
+    // Redirect to the appropriate page or show an error message
+    echo "Unauthorized access";
+    exit();
+}
+
+// Determine the user's role
+$userRole = '';
+if (isset($_SESSION['instructor_name'])) {
+    $userRole = 'instructor';
+} elseif (isset($_SESSION['assistant_name'])) {
+    $userRole = 'assistant';
+} elseif (isset($_SESSION['student_name'])) {
+    $userRole = 'student';
+}
+
+// Check the user's role and execute the delete operation based on privileges
+if ($userRole === 'assistant' || $userRole === 'student') {
+    // Assistant can't perform delete operations
+    echo "You do not have permission to delete records.";
+    exit();
+}
+
 if (isset($_POST['id'], $_POST['table'], $_POST['newData'])) {
     $recordId = $_POST['id'];
     $table = $_POST['table'];

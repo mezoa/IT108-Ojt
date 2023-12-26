@@ -4,7 +4,7 @@ $host = 'localhost';
 $port = '5432';
 $dbname = 'ojt';
 $user = 'postgres';
-$password = 'asd123!A';
+$password = 'admin';
 
 $connection_string = "host=$host port=$port dbname=$dbname user=$user password=$password";
 

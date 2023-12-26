@@ -81,6 +81,7 @@ $(document).ready(function () {
             editIcons.show();
             row.find(".save-btn").closest("td").remove();
             alert("Record updated successfully!");
+            location.reload();
           } else {
             alert("Error updating record: " + response);
           }
@@ -123,6 +124,7 @@ $(document).ready(function () {
           if (response.trim() === "success") {
             row.remove();
             alert("Record deleted successfully!");
+            location.reload();
           } else {
             alert("Error deleting record: " + response);
           }

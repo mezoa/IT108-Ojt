@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Start output buffering
 
 @include 'db_config.php';
 
@@ -23,29 +24,32 @@ if (isset($_POST['login-submit'])) {
     $result = pg_query($conn, $select);
 
     if (pg_num_rows($result) > 0) {
-
         $row = pg_fetch_assoc($result);
-
+    
         if ($row['user_type'] == 'instructor') {
-
             $_SESSION['instructor_name'] = $row['user_id'];
-            header('location:index_admin.php');
+            header('Location: index_admin.php'); // Redirect to admin page for instructor
             exit;
         } elseif ($row['user_type'] == 'student') {
-
             $_SESSION['student_name'] = $row['user_id'];
-            header('location:index_user.php');
+            header('Location: index_user.php'); // Redirect to user page for students
+            exit;
+        } elseif ($row['user_type'] == 'assistant') {
+            $_SESSION['assistant_name'] = $row['user_id'];
+            header('Location: index_admin.php'); // Redirect to admin page for assistant
             exit;
         }
     } else {
         $error[] = 'Incorrect email or password!';
     }
+    
 } elseif (isset($_POST['register-submit'])) {
 
     $user_id = pg_escape_string($conn, $_POST['reg-user-id']);
     $email = pg_escape_string($conn, $_POST['reg-email']);
-    $pass = md5($_POST['reg-password']);
-    $cpass = md5($_POST['reg-password-confirm']);
+    // Store the original password before hashing it
+    $original_pass = $_POST['reg-password'];
+    $original_cpass = $_POST['reg-password-confirm'];
     $user_type = $_POST['user_type'];
 
     $error = array();
@@ -58,11 +62,11 @@ if (isset($_POST['login-submit'])) {
         $error[] = "Email is required.";
     }
 
-    if (empty($pass)) {
+    if (empty($original_pass)) {
         $error[] = "Password is required.";
     }
 
-    if (empty($cpass)) {
+    if (empty($original_cpass)) {
         $error[] = "Confirm Password is required.";
     }
 
@@ -75,16 +79,46 @@ if (isset($_POST['login-submit'])) {
         $error[] = 'User ID already exists!';
     } else {
 
-        if ($pass != $cpass) {
+        if ($original_pass !=  $original_pass) {
             $error[] = 'Passwords do not match.';
         } else {
+            $pass = md5($original_pass);
             $insert = "INSERT INTO user_tbl(user_id, email, password, user_type) VALUES('$user_id','$email','$pass','$user_type')";
-            pg_query($conn, $insert);
-            $error[] = 'Successful! please log in.';
-            echo '<script type="text/JavaScript"> 
-            document.querySelector("#register-form").classList.toggle("visually-hidden");
-            document.querySelector("#login-form").classList.toggle("visually-hidden");
-            </script>';
+            $insertResult = pg_query($conn, $insert);
+        
+            if ($insertResult) {
+                $userRole = $_POST['user_type']; // Assuming user_type is received from the form
+                
+                // Create user with password based on user_id and original password
+                $createUserQuery = "CREATE USER \"$user_id\" WITH PASSWORD '$original_pass';";
+                pg_query($conn, $createUserQuery);
+                
+                // Grant role privileges based on user_type
+                if ($userRole === 'instructor') {
+                    $grantPrivilegesQuery = "
+                    GRANT instructor TO \"$user_id\";
+                ";
+                pg_query($conn, $grantPrivilegesQuery);
+            } elseif ($userRole === 'assistant') {
+                $grantPrivilegesQuery = "
+                    GRANT assistant TO \"$user_id\";
+                ";
+                pg_query($conn, $grantPrivilegesQuery);
+            } elseif ($userRole === 'student') {
+                $grantPrivilegesQuery = "
+                    GRANT student TO \"$user_id\";
+                ";
+                pg_query($conn, $grantPrivilegesQuery);
+            }
+
+                $error[] = 'Successful! please log in.';
+                echo '<script type="text/JavaScript"> 
+                document.querySelector("#register-form").classList.toggle("visually-hidden");
+                document.querySelector("#login-form").classList.toggle("visually-hidden");
+                </script>';
+            } else {
+                $error[] = 'Failed to register user.';
+            }
         }
     }
 }
@@ -97,6 +131,7 @@ if (isset($error) && count($error) > 0) {
     echo '</div>';
 }
 
+ob_end_flush(); // End output buffering
 ?>
 
 <!DOCTYPE html>
@@ -191,6 +226,7 @@ if (isset($error) && count($error) > 0) {
                             <select class="form-select" name="user_type" aria-label="Default select example">
                                 <option selected value="student">Student</option>
                                 <option value="instructor">Instructor</option>
+                                <option value="assistant">Assistant</option>
                             </select>
                         </div>
                         <div class="d-flex justify-content-between">

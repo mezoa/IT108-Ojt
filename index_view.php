@@ -3,15 +3,22 @@ include "db_config.php";
 
 session_start();
 
-if (!isset($_SESSION['instructor_name'])) {
-  header('location:form.php');
+if (!isset($_SESSION['instructor_name']) && !isset($_SESSION['assistant_name'])) {
+  header('location:index.php');
+  exit();
 }
+
 $conn = pg_connect($connection_string); // Establish a PostgreSQL database connection
 
-function viewOjtRecords($conn)
-{
-  $ojt_program_query = "SELECT * FROM ojt_program;";
-  $ojt_program_result = pg_query($conn, $ojt_program_query);
+function viewOjtRecords($conn, $academic_year = "All") {
+  if ($academic_year == "All") {
+    $ojt_program_query = "SELECT * FROM ojt_program;";
+    $ojt_program_result = pg_query($conn, $ojt_program_query);
+  } else {
+    $ojt_program_query = "SELECT * FROM ojt_program WHERE academic_year = $1;";
+    $ojt_program_result = pg_query_params($conn, $ojt_program_query, array($academic_year));
+  }
+
 
   if ($ojt_program_result) {
     echo "<h2>OJT Program Table</h2>";
@@ -71,10 +78,14 @@ function viewOjtRecords($conn)
 }
 
 
-function viewCompanies($conn)
-{
-  $companies_query = "SELECT * FROM companies";
-  $companies_result = pg_query($conn, $companies_query);
+function viewCompanies($conn, $academic_year = "All") {
+  if ($academic_year == "All") {
+    $companies_query = "SELECT * FROM companies";
+    $companies_result = pg_query($conn, $companies_query);
+  } else {
+    $companies_query = "SELECT * FROM companies WHERE date = $1";
+    $companies_result = pg_query_params($conn, $companies_query, array($academic_year));
+  }
 
   if ($companies_result) {
     echo "<h2>Companies</h2>";
@@ -166,6 +177,8 @@ function viewReqs($conn)
   } else {
     echo "Error retrieving records: " . pg_last_error($conn);
   }
+
+  
 }
 ?>
 
@@ -189,14 +202,15 @@ function viewReqs($conn)
 <body>
   <header>
     <div class="user-info">
-      <h1><?php echo $_SESSION['instructor_name'] ?></h1>
-      <p>Instructor</p>
+      <h1><?php echo isset($_SESSION['instructor_name']) ? $_SESSION['instructor_name'] : (isset($_SESSION['assistant_name']) ? $_SESSION['assistant_name'] : 'Guest'); ?></h1>
+      <p><?php echo isset($_SESSION['instructor_name']) ? 'Instructor' : (isset($_SESSION['assistant_name']) ? 'Assistant' : 'Guest'); ?></p>
     </div>
     <div class="spacer"></div>
     <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#importModal">Import Data</button>
     <a href="add_record.php" class="btn btn-dark" role="button">Add Record</a>
     <a href="index_admin.php" class="btn btn-danger" role="button">&#10006;</a>
   </header>
+
 
   <!-- Import Modal -->
   <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
@@ -221,7 +235,7 @@ function viewReqs($conn)
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary" name="submit">Import</button>
+              <button type="submit" class="btn btn-danger" name="submit">Import</button>
             </div>
           </form>
         </div>
@@ -229,7 +243,43 @@ function viewReqs($conn)
     </div>
   </div>
 
+  <?php 
+  $academic_year = $_GET['academic_year'] ?? 'All';
+  ?>
 
+  <!-- Academic Year Select and Table Select Dropdowns -->
+  <div style="display: flex; justify-content: flex-start; align-items: center; width: 100%; padding: 20px; background-color: #f8f9fa;">
+    <div style="width: 150px; margin-right: 50px;">
+      <label for="academicYearSelect">Academic Year:</label>
+      <select id="academicYearSelect" style="width: 100%; padding: 5px;">
+        <option value="All" <?php echo $academic_year == "All" ? "selected" : ""; ?>>All</option>
+        <option value="2020-2021" <?php echo $academic_year == "2020-2021" ? "selected" : ""; ?>>2020-2021</option>
+        <option value="2021-2022" <?php echo $academic_year == "2021-2022" ? "selected" : ""; ?>>2021-2022</option>
+        <option value="2022-2023" <?php echo $academic_year == "2022-2023" ? "selected" : ""; ?>>2022-2023</option>
+      </select>
+    </div>
+
+    <div style="width: 150px;">
+      <label for="tableSelect">Table:</label>
+      <select id="tableSelect" style="width: 100%; padding: 5px;">
+        <option value="ojt_program">OJT Program</option>
+        <option value="companies">Companies</option>
+        <option value="requirements">Requirements</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <div id="ojt_program">
+      <?php viewOjtRecords($conn, $academic_year); ?>
+    </div>
+    <div id="companies" style="display: none;">
+      <?php viewCompanies($conn, $academic_year); ?>
+    </div>
+    <div id="requirements" style="display: none;">
+      <?php viewReqs($conn); ?>
+    </div>
+  </div>
 
   <div class="container">
     <?php
@@ -242,15 +292,6 @@ function viewReqs($conn)
     }
     ?>
 
-    <div class="table-responsive">
-      <?php
-      // Call the functions to display records
-      viewOjtRecords($conn);
-      viewCompanies($conn);
-      viewReqs($conn);
-      ?>
-    </div>
-
   </div>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -259,7 +300,7 @@ function viewReqs($conn)
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="js/edit_del.js"></script>
-
+  <script src="js/table_selection.js"></script>
 </body>
 
 </html>

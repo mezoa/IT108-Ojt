@@ -122,7 +122,7 @@ if (!isset($_SESSION['student_name'])) {
   <!-- View Modal -->
   <!-- View Modal -->
   <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+   <div class="modal-dialog modal-dialog-centered modal-user">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="viewModalLabel">View Academic Year Record</h5>
