@@ -1,4 +1,5 @@
 <?php
+session_start(); 
 require 'vendor/autoload.php'; // Include the Composer autoloader
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -50,9 +51,10 @@ if (isset($_POST['submit'])) {
         // Fetch data from Excel cells for companies table
         $company_name = $sheet->getCell('A'.$row->getRowIndex())->getValue() ?: '';
         $moa = $sheet->getCell('B'.$row->getRowIndex())->getValue() ?: '';
-        
+        $date = $sheet->getCell('C'.$row->getRowIndex())->getValue() ?: '';
+
         // Insert data into the companies table
-        $sql = "INSERT INTO companies (company_name, moa) VALUES ('$company_name', '$moa')";
+        $sql = "INSERT INTO companies (company_name, moa, date) VALUES ('$company_name', '$moa', '$date')";
         $result = pg_query($conn, $sql);
 
         // Check for errors or handle successful insertion
@@ -68,7 +70,8 @@ if (isset($_POST['submit'])) {
       break;
   }
 
-  echo "Data imported successfully!";
+  // After the import is successful
+  $_SESSION['import_success'] = "Data imported successfully!";
   header("Location: index_view.php");
   exit(); // Ensure no further code execution after the redirection
 }

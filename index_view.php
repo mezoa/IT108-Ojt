@@ -219,7 +219,18 @@ function viewReqs($conn)
     <a href="index_admin.php" class="btn btn-danger" role="button">&#10006;</a>
   </header>
 
-
+  <?php
+    // Display the success message
+    if (isset($_SESSION['import_success'])) {
+    ?>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?php echo $_SESSION['import_success']; ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <?php
+      unset($_SESSION['import_success']); // remove the message from session
+    }
+  ?>
   <!-- Import Modal -->
   <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

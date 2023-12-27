@@ -48,6 +48,12 @@ if (isset($_POST['id'], $_POST['table'])) {
                 exit();
             }
             $primaryKey = "company_entry_id";
+
+            // Update the referencing records in the 'ojt_program' table
+            $updateOjtProgramQuery = "UPDATE ojt_program SET company_entry_id = NULL WHERE company_entry_id = '$recordId'";
+            pg_query($conn, $updateOjtProgramQuery);
+
+            // Update the referencing records in the 'requirements' table
             $updateRequirementsQuery = "UPDATE requirements SET company_entry_id = NULL WHERE company_entry_id = '$recordId'";
             pg_query($conn, $updateRequirementsQuery);
             break;
