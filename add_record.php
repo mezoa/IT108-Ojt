@@ -3,7 +3,7 @@ include "db_config.php";
 
 session_start();
 
-if (!isset($_SESSION['instructor_name'])) {
+if (!isset($_SESSION['instructor_name']) && !isset($_SESSION['assistant_name'])) {
    header('location:index.php');
 }
 
@@ -14,7 +14,11 @@ if (isset($_POST["submit"])) {
 
    // Retrieve attribute values from the form
    foreach ($attributes as $attribute) {
-      $attributeValues[$attribute] = $_POST[$attribute];
+      if (empty($_POST[$attribute]) && !in_array($attribute, ['id_no', 'company_entry_id', 'rq_id'])) {
+         $attributeValues[$attribute] = 'NULL';
+      } else {
+         $attributeValues[$attribute] = $_POST[$attribute];
+      }
    }
 
    // Construct the SQL query to insert a new record into the selected table
@@ -59,15 +63,30 @@ if (isset($_POST["submit"])) {
          var attributeInputs = document.getElementById("attribute_inputs");
          attributeInputs.innerHTML = "";
 
-         attributes.forEach(function(attribute) {
-            var inputField = document.createElement("div");
-            inputField.classList.add("mb-3");
-            inputField.innerHTML = `
-               <label class="form-label">${attribute.replace(/_/g, ' ').toUpperCase()}</label>
-               <input type="text" class="form-control" name="${attribute}" placeholder="Enter ${attribute.replace(/_/g, ' ')}">
+         for (var i = 0; i < attributes.length; i += 2) {
+            var row = document.createElement("div");
+            row.classList.add("row");
+
+            var col1 = document.createElement("div");
+            col1.classList.add("col", "mb-3");
+            col1.innerHTML = `
+               <label class="form-label">${attributes[i].replace(/_/g, ' ').toUpperCase()}</label>
+               <input type="text" class="form-control" name="${attributes[i]}" placeholder="Enter ${attributes[i].replace(/_/g, ' ')}">
             `;
-            attributeInputs.appendChild(inputField);
-         });
+            row.appendChild(col1);
+
+            if (i + 1 < attributes.length) {
+               var col2 = document.createElement("div");
+               col2.classList.add("col", "mb-3");
+               col2.innerHTML = `
+                  <label class="form-label">${attributes[i + 1].replace(/_/g, ' ').toUpperCase()}</label>
+                  <input type="text" class="form-control" name="${attributes[i + 1]}" placeholder="Enter ${attributes[i + 1].replace(/_/g, ' ')}">
+               `;
+               row.appendChild(col2);
+            }
+
+            attributeInputs.appendChild(row);
+         }
 
          // Add hidden input fields to store attribute names
          var hiddenAttributesField = document.createElement("input");
@@ -82,8 +101,8 @@ if (isset($_POST["submit"])) {
 <body>
    <header>
       <div class="user-info">
-         <h1><?php echo $_SESSION['instructor_name'] ?></h1>
-         <p>Instructor</p>
+         <h1><?php echo isset($_SESSION['instructor_name']) ? $_SESSION['instructor_name'] : $_SESSION['assistant_name'] ?></h1>
+         <p><?php echo isset($_SESSION['instructor_name']) ? 'Instructor' : 'Assistant' ?></p>
       </div>
       <div class="spacer"></div>
       <a href="index_view.php" class="btn btn-danger" role="button">&#10006;</a>
@@ -109,8 +128,8 @@ if (isset($_POST["submit"])) {
             <div id="attribute_inputs"></div>
 
             <div class="float-end">
-               <button type="submit" class="btn btn-success" name="submit">Save</button>
-               <a href="index_view.php" class="btn btn-danger">Cancel</a>
+               <button type="submit" class="btn btn-danger" name="submit">Save</button>
+               <a href="index_view.php" class="btn btn-secondary">Cancel</a>
             </div>
          </form>
       </div>

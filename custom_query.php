@@ -2,9 +2,10 @@
 include "db_config.php";
 session_start();
 
+
 // Check for session or authentication
-if (!isset($_SESSION['instructor_name'])) {
-    header('location:index.php');
+if (!isset($_SESSION['instructor_name']) && !isset($_SESSION['assistant_name'])) {
+    echo "Session expired or not authenticated";
     exit;
 }
 
@@ -32,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "No custom query received";
     }
 }
+
 
 function generateTableHTML($result)
 {

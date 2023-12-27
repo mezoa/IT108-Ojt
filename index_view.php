@@ -10,13 +10,19 @@ if (!isset($_SESSION['instructor_name']) && !isset($_SESSION['assistant_name']))
 
 $conn = pg_connect($connection_string); // Establish a PostgreSQL database connection
 
-function viewOjtRecords($conn, $academic_year = "All") {
-  if ($academic_year == "All") {
+function viewOjtRecords($conn, $academic_year = "All", $program = "All") {
+  if ($academic_year == "All" && $program == "All") {
     $ojt_program_query = "SELECT * FROM ojt_program;";
     $ojt_program_result = pg_query($conn, $ojt_program_query);
-  } else {
+  } else if ($academic_year != "All" && $program == "All") {
     $ojt_program_query = "SELECT * FROM ojt_program WHERE academic_year = $1;";
     $ojt_program_result = pg_query_params($conn, $ojt_program_query, array($academic_year));
+  } else if ($academic_year == "All" && $program != "All") {
+    $ojt_program_query = "SELECT * FROM ojt_program WHERE program = $1;";
+    $ojt_program_result = pg_query_params($conn, $ojt_program_query, array($program));
+  } else {
+    $ojt_program_query = "SELECT * FROM ojt_program WHERE academic_year = $1 AND program = $2;";
+    $ojt_program_result = pg_query_params($conn, $ojt_program_query, array($academic_year, $program));
   }
 
 
@@ -244,39 +250,57 @@ function viewReqs($conn)
   </div>
 
   <?php 
-  $academic_year = $_GET['academic_year'] ?? 'All';
+    $academic_year = isset($_GET['academic_year']) ? $_GET['academic_year'] : 'All';
+    $program = isset($_GET['program']) ? $_GET['program'] : "All";
   ?>
 
   <!-- Academic Year Select and Table Select Dropdowns -->
-  <div style="display: flex; justify-content: flex-start; align-items: center; width: 100%; padding: 20px; background-color: #f8f9fa;">
-    <div style="width: 150px; margin-right: 50px;">
-      <label for="academicYearSelect">Academic Year:</label>
-      <select id="academicYearSelect" style="width: 100%; padding: 5px;">
-        <option value="All" <?php echo $academic_year == "All" ? "selected" : ""; ?>>All</option>
-        <option value="2020-2021" <?php echo $academic_year == "2020-2021" ? "selected" : ""; ?>>2020-2021</option>
-        <option value="2021-2022" <?php echo $academic_year == "2021-2022" ? "selected" : ""; ?>>2021-2022</option>
-        <option value="2022-2023" <?php echo $academic_year == "2022-2023" ? "selected" : ""; ?>>2022-2023</option>
-      </select>
+  <form id="editPageFilterForm" class="editPageFilterForm">
+  <label class="editPageLabelFilter">Filter By:</label>
+    <div class="editPageFilterFormContent">
+      <div class="editPageFilterFormSection">
+        <label for="editPageAcademicYearSelect">Academic Year:</label>
+        <select id="editPageAcademicYearSelect" name="academic_year" class="editPageFilterFormSelect">
+          <option value="All" <?php echo $academic_year == "All" ? "selected" : ""; ?>>All</option>
+          <option value="2020-2021" <?php echo $academic_year == "2020-2021" ? "selected" : ""; ?>>2020-2021</option>
+          <option value="2021-2022" <?php echo $academic_year == "2021-2022" ? "selected" : ""; ?>>2021-2022</option>
+          <option value="2022-2023" <?php echo $academic_year == "2022-2023" ? "selected" : ""; ?>>2022-2023</option>
+        </select>
+      </div>
+
+      <div class="editPageFilterFormSection">
+        <label for="editPageProgramSelect">Program:</label>
+        <select id="editPageProgramSelect" name="program" class="editPageFilterFormSelect">
+          <option value="All" <?php echo $program == "All" ? "selected" : ""; ?>>All</option>
+          <option value="BSIT" <?php echo $program == "BSIT" ? "selected" : ""; ?>>BSIT</option>
+          <option value="BSCS" <?php echo $program == "BSCS" ? "selected" : ""; ?>>BSCS</option>
+          <option value="BSIS" <?php echo $program == "BSIS" ? "selected" : ""; ?>>BSIS</option>
+        </select>
+      </div>
+
+      <div class="editPageFilterFormSection">
+        <label for="editPageTableSelect">Table:</label>
+        <select id="editPageTableSelect" class="editPageFilterFormSelect">
+          <option value="ojt_program">OJT Program</option>
+          <option value="companies">Companies</option>
+          <option value="requirements">Requirements</option>
+        </select>
+      </div>
     </div>
 
-    <div style="width: 150px;">
-      <label for="tableSelect">Table:</label>
-      <select id="tableSelect" style="width: 100%; padding: 5px;">
-        <option value="ojt_program">OJT Program</option>
-        <option value="companies">Companies</option>
-        <option value="requirements">Requirements</option>
-      </select>
+    <div class="editPageFilterFormButton">
+      <button type="submit" class="btn btn-danger">Apply Filter</button>
     </div>
-  </div>
+  </form>
 
   <div class="table-responsive">
-    <div id="ojt_program">
-      <?php viewOjtRecords($conn, $academic_year); ?>
+    <div id="editPageOjtProgram">
+      <?php viewOjtRecords($conn, $academic_year, $program); ?>
     </div>
-    <div id="companies" style="display: none;">
+    <div id="editPageCompanies" style="display: none;">
       <?php viewCompanies($conn, $academic_year); ?>
     </div>
-    <div id="requirements" style="display: none;">
+    <div id="editPageRequirements" style="display: none;">
       <?php viewReqs($conn); ?>
     </div>
   </div>
@@ -291,6 +315,7 @@ function viewReqs($conn)
     </div>';
     }
     ?>
+  </div>
 
   </div>
 

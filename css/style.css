@@ -310,3 +310,47 @@ input[type="checkbox"] {
 .modal-user {
   max-width: 80%; /* Adjust this value according to your requirement */
 }
+
+
+.editPageFilterForm {
+  width: auto; /* Change this */
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.editPageFilterFormContent {
+  display: flex;
+  justify-content: flex-start; /* Change this */
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.editPageFilterFormSection {
+  width: 150px;
+  margin-right: 50px;
+}
+
+.editPageFilterFormSelect {
+  width: 100%;
+  padding: 5px;
+}
+
+.editPageFilterFormButton {
+  padding: 5px; /* Change this */
+  height: 30px; /* Change this */
+  width: 150px; /* Match the width of the select dropdowns */
+  color: white;
+  border: none;
+  text-align: left; /* Change this */
+  display: inline-block;
+  font-size: 16px; /* Change this */
+  margin-left: -10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.editPageLabelFilter{
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}

@@ -21,11 +21,18 @@ if (isset($_SESSION['instructor_name'])) {
 }
 
 // Check the user's role and execute the delete operation based on privileges
-if ($userRole === 'assistant' || $userRole === 'student') {
+if ($userRole === 'assistant') {
     // Assistant can't perform delete operations
+    // But they can select, insert, and update a particular table
+    if (!in_array($_POST['table'], ['ojt_program', 'companies', 'requirements'])) {
+        echo "You do not have permission to modify this table.";
+        exit();
+    }
+} elseif ($userRole === 'student') {
     echo "You do not have permission to delete records.";
     exit();
 }
+
 
 if (isset($_POST['id'], $_POST['table'], $_POST['newData'])) {
     $recordId = $_POST['id'];
