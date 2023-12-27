@@ -17,13 +17,12 @@ if (isset($_POST['submit'])) {
       // Import data into the 'ojt_program' table
       foreach ($sheet->getRowIterator(2) as $row) {
         // Fetch data from Excel cells
-        $id_no = $sheet->getCell('A'.$row->getRowIndex())->getValue();
-        $last_name = $sheet->getCell('B'.$row->getRowIndex())->getValue();
-        $first_name = $sheet->getCell('C'.$row->getRowIndex())->getValue();
+        $id_no = $sheet->getCell('A'.$row->getRowIndex())->getValue() ?: '';
+        $last_name = $sheet->getCell('B'.$row->getRowIndex())->getValue() ?: '';
+        $first_name = $sheet->getCell('C'.$row->getRowIndex())->getValue() ?: '';
 
         // Handle contact_no as a string or NULL if empty
-        $contact_no = $sheet->getCell('G'.$row->getRowIndex())->getValue();
-        $contact_no = ($contact_no !== null && $contact_no !== '') ? pg_escape_string($contact_no) : 'NULL';
+        $contact_no = $sheet->getCell('G'.$row->getRowIndex())->getValue() ?: '';
 
         // Fetch other attributes accordingly based on your Excel columns and handle empty values
         $middle_name = $sheet->getCell('D'.$row->getRowIndex())->getValue() ?: '';
@@ -34,13 +33,13 @@ if (isset($_POST['submit'])) {
 
         // Insert data into the ojt_program table after sanitizing variables
         $sql = "INSERT INTO ojt_program (id_no, last_name, first_name, middle_name, program, yr_lvl, contact_no, email, academic_year) 
-                VALUES ('$id_no', '$last_name', '$first_name', '$middle_name', '$program', '$yr_lvl', $contact_no, '$email', '$academic_year')";
+                VALUES ('$id_no', '$last_name', '$first_name', '$middle_name', '$program', '$yr_lvl', '$contact_no', '$email', '$academic_year')";
         $result = pg_query($conn, $sql);
 
         // Check for errors or handle successful insertion
         if (!$result) {
           echo "Error importing data into ojt_program: " . pg_last_error($conn);
-          break;
+          // Don't break, continue to the next row
         }
       }
       break;
@@ -49,9 +48,8 @@ if (isset($_POST['submit'])) {
       // Import data into the 'companies' table
       foreach ($sheet->getRowIterator(2) as $row) {
         // Fetch data from Excel cells for companies table
-        $company_name = $sheet->getCell('A'.$row->getRowIndex())->getValue();
-        $moa = $sheet->getCell('B'.$row->getRowIndex())->getValue();
-        // Fetch other attributes accordingly based on your Excel columns for the companies table
+        $company_name = $sheet->getCell('A'.$row->getRowIndex())->getValue() ?: '';
+        $moa = $sheet->getCell('B'.$row->getRowIndex())->getValue() ?: '';
         
         // Insert data into the companies table
         $sql = "INSERT INTO companies (company_name, moa) VALUES ('$company_name', '$moa')";
@@ -60,7 +58,7 @@ if (isset($_POST['submit'])) {
         // Check for errors or handle successful insertion
         if (!$result) {
           echo "Error importing data into companies: " . pg_last_error($conn);
-          break;
+          // Don't break, continue to the next row
         }
       }
       break;
