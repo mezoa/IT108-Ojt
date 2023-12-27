@@ -6,8 +6,13 @@ document
     document.getElementById("editPageCompanies").style.display = "none";
     document.getElementById("editPageRequirements").style.display = "none";
 
-    // Show selected table
-    document.getElementById("editPage" + this.value).style.display = "block";
+    // Show the selected table
+    var selectedTable = this.value;
+    document.getElementById(
+      "editPage" +
+        selectedTable.charAt(0).toUpperCase() +
+        selectedTable.slice(1)
+    ).style.display = "block";
   });
 
 document
@@ -21,13 +26,18 @@ document
       "editPageAcademicYearSelect"
     ).value;
     var program = document.getElementById("editPageProgramSelect").value;
+    var table = document.getElementById("editPageTableSelect").value;
 
     // Get the current URL
     var url = new URL(window.location.href);
 
     // Set the academic_year and program parameters in the URL
     url.searchParams.set("academic_year", academicYear);
-    url.searchParams.set("program", program);
+    if (table === "ojt_program") {
+      url.searchParams.set("program", program);
+    } else {
+      url.searchParams.delete("program");
+    }
 
     // Reload the page with the new URL
     window.location.href = url.href;
