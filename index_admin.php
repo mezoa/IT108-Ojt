@@ -45,7 +45,7 @@ while ($row = pg_fetch_assoc($result)) {
     $value = $row[$column];
     // Handle null values
     if ($value === null) {
-      $value = 'N/A'; // Display 'N/A' for null values
+      $value = ''; // Display 'N/A' for null values
     }
     $output .= '<td style="padding: 12px; text-align: center;">' . $value . '</td>';
   }

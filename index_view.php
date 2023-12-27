@@ -38,6 +38,8 @@ function viewOjtRecords($conn, $academic_year = "All", $program = "All") {
                     <th data-column='middle_name'>Middle Name</th>
                     <th data-column='program'>Program</th>
                     <th data-column='yr_lvl'>Year Level</th>
+                    <th data-column='email'>Email</th>
+                    <th data-column='contact_no'>Contact #</th>
                     <th data-column='academic_year'>Academic Year</th>
                     <th data-column='company_entry_id'>Company ID</th>
                     <th data-column='status'>Status</th>
@@ -60,6 +62,8 @@ function viewOjtRecords($conn, $academic_year = "All", $program = "All") {
       echo "<td data-column='middle_name'>" . $row['middle_name'] . "</td>";
       echo "<td data-column='program'>" . $row['program'] . "</td>";
       echo "<td data-column='yr_lvl'>" . $row['yr_lvl'] . "</td>";
+      echo "<td data-column='email'>" . $row['email'] . "</td>";
+      echo "<td data-column='contact_no'>" . $row['contact_no'] . "</td>";
       echo "<td data-column='academic_year'>" . $row['academic_year'] . "</td>";
       echo "<td data-column='company_entry_id'>" . $row['company_entry_id'] . "</td>";
       echo "<td data-column='status'>" . $row['status'] . "</td>";
@@ -183,8 +187,6 @@ function viewReqs($conn)
   } else {
     echo "Error retrieving records: " . pg_last_error($conn);
   }
-
-  
 }
 ?>
 

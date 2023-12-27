@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $value = $row[$column];
                 // Handle null values
                 if ($value === null) {
-                    $value = 'N/A'; // Display 'N/A' for null values
+                    $value = ''; // Display '' for null values
                 }
                 $output .= '<td style="padding: 12px; text-align: center;">' . $value . '</td>';
             }
@@ -109,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $value = $row[$column];
                 // Handle null values
                 if ($value === null) {
-                    $value = 'N/A'; // Display 'N/A' for null values
+                    $value = ''; // Display '' for null values
                 }
                 $output .= '<td style="padding: 12px; text-align: center;">' . $value . '</td>';
             }
@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $value = $row[$column];
                 // Handle null values
                 if ($value === null) {
-                    $value = 'N/A'; // Display 'N/A' for null values
+                    $value = ''; // Display '' for null values
                 }
                 $output .= '<td style="padding: 12px; text-align: center;">' . $value . '</td>';
             }
